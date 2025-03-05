@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSV-File-Upload-Utility-Backend", "CSV-File-Upload-Utility-Backend\CSV-File-Upload-Utility-Backend.csproj", "{D38AFE6C-1B2E-47A0-AA14-F66312D53C85}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Csv-File-Upload-Utility-Test", "Csv-File-Upload-Utility-Test\Csv-File-Upload-Utility-Test.csproj", "{BE68A96E-162C-41BA-A896-AE56FB18E5E3}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D38AFE6C-1B2E-47A0-AA14-F66312D53C85}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D38AFE6C-1B2E-47A0-AA14-F66312D53C85}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D38AFE6C-1B2E-47A0-AA14-F66312D53C85}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D38AFE6C-1B2E-47A0-AA14-F66312D53C85}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BE68A96E-162C-41BA-A896-AE56FB18E5E3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BE68A96E-162C-41BA-A896-AE56FB18E5E3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BE68A96E-162C-41BA-A896-AE56FB18E5E3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BE68A96E-162C-41BA-A896-AE56FB18E5E3}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

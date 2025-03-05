@@ -1,0 +1,6 @@
+@CSV_File_Upload_Utility_Backend_HostAddress = http://localhost:5275
+
+GET {{CSV_File_Upload_Utility_Backend_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
