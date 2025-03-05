@@ -29,7 +29,7 @@ var builder = WebApplication.CreateBuilder(args);
         options.AddPolicy("CorsPolicy",
             policy =>
             {
-                policy.WithOrigins("http://localhost:8081", "https://localhost:8080")
+                policy.WithOrigins("http://localhost:8081", "http://localhost:8080")
                     .AllowAnyMethod()
                     .AllowAnyHeader();
             });
