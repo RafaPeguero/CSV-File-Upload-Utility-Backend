@@ -8,14 +8,15 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="CsvHelper" Version="33.0.1" />
+        <PackageReference Include="ExcelDataReader" Version="3.7.0" />
+        <PackageReference Include="ExcelDataReader.DataSet" Version="3.7.0" />
+        <PackageReference Include="Microsoft.AspNetCore.Cors" Version="2.3.0" />
         <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.10"/>
+        <PackageReference Include="Microsoft.Azure.Cosmos" Version="3.47.2" />
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2"/>
-    </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="Infrastructure\" />
-      <Folder Include="Interfaces\" />
-      <Folder Include="Services\" />
+        <PackageReference Include="System.Text.Encoding.CodePages" Version="9.0.2" />
     </ItemGroup>
 
 </Project>
