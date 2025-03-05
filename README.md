@@ -37,3 +37,9 @@ A .NET Web API backend for processing and storing sales order data from CSV and 
    ```bash
    git clone https://github.com/your-username/sales-order-upload-backend.git
    cd sales-order-upload-backend
+
+2. Restore Dependencies
+   ```bash
+   dotnet restore
+
+3. Run th app and you will get the swagger page with the endpoints
