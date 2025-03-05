@@ -26,4 +26,8 @@
       <ProjectReference Include="..\CSV-File-Upload-Utility-Backend\CSV-File-Upload-Utility-Backend.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Content Include="obj\rider.project.model.nuget.info" />
+    </ItemGroup>
+
 </Project>
