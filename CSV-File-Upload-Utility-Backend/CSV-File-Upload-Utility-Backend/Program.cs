@@ -1,44 +1,54 @@
+using CSV_File_Upload_Utility_Backend.Infrastructure;
+using CSV_File_Upload_Utility_Backend.Interfaces;
+using CSV_File_Upload_Utility_Backend.Services;
+using Microsoft.Azure.Cosmos;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+    builder.Services.AddControllers();
+    builder.Services.AddEndpointsApiExplorer();
+    builder.Services.AddSwaggerGen();
+    
+    builder.Services.AddSingleton(sp => {
+        var cosmosEndpoint = builder.Configuration["CosmosDb:Endpoint"];
+        var cosmosKey = builder.Configuration["CosmosDb:Key"];
+        return new CosmosClient(cosmosEndpoint, cosmosKey);
+    });
+    
 
-var app = builder.Build();
+    builder.Services.AddScoped<IFileParseService, FileParserService>();
+    builder.Services.AddScoped<ISalesOrderService>(sp => {
+        var cosmosClient = sp.GetRequiredService<CosmosClient>();
+        var databaseName = builder.Configuration["CosmosDb:DatabaseName"];
+        var containerName = builder.Configuration["CosmosDb:ContainerName"];
+        return new CosmosDbService(cosmosClient, databaseName, containerName);
+    });
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
-
-app.UseHttpsRedirection();
-
-var summaries = new[]
-{
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
-
-app.MapGet("/weatherforecast", () =>
+    builder.Services.AddCors(options =>
     {
-        var forecast = Enumerable.Range(1, 5).Select(index =>
-                new WeatherForecast
-                (
-                    DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-                    Random.Shared.Next(-20, 55),
-                    summaries[Random.Shared.Next(summaries.Length)]
-                ))
-            .ToArray();
-        return forecast;
-    })
-    .WithName("GetWeatherForecast")
-    .WithOpenApi();
+        options.AddPolicy("CorsPolicy",
+            policy =>
+            {
+                policy.WithOrigins("http://localhost:8080") // Your Vue app URL
+                    .AllowAnyMethod()
+                    .AllowAnyHeader();
+            });
+    });
 
-app.Run();
+    var app = builder.Build();
 
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}
+    if (app.Environment.IsDevelopment())
+    {
+        app.UseSwagger();
+        app.UseSwaggerUI();
+    }
+
+    app.UseHttpsRedirection();
+
+    app.UseHttpsRedirection();
+    app.UseCors("CorsPolicy");
+    app.UseAuthorization();
+    app.MapControllers();
+
+
+    app.Run();

@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Csv-File-Upload-Utility-Test")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+87492aeca0328336b183952f6ffaa4c53899de2e")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+0c48d05ad56439d5f8753afc092cb430e30fb5c9")]
 [assembly: System.Reflection.AssemblyProductAttribute("Csv-File-Upload-Utility-Test")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Csv-File-Upload-Utility-Test")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
