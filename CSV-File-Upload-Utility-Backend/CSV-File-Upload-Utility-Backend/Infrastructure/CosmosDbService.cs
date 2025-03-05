@@ -21,14 +21,14 @@ public class CosmosDbService(CosmosClient cosmosClient, string databaseName, str
         {
             try
             {
-                await _container.UpsertItemAsync(order, new PartitionKey(order.Id));
+                await _container.UpsertItemAsync(order, new PartitionKey(order.OrderNumber));
                 successCount++;
             }
             catch (Exception ex)
             {
                 errors.Add(new SaveError 
                 { 
-                    OrderId = order.Id, 
+                    OrderId = order.OrderNumber, 
                     Error = ex.Message 
                 });
             }

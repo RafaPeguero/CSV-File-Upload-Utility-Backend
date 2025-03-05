@@ -6,7 +6,7 @@ public class SalesOrder
 {
     [JsonProperty(PropertyName = "id")]
     public string Id { get; set; }
-
+    
     [JsonProperty(PropertyName = "orderNumber")]
     public string OrderNumber { get; set; }
 
@@ -46,8 +46,8 @@ public class SalesOrder
     [JsonProperty(PropertyName = "shipToPhone")]
     public string ShipToPhone { get; set; }
 
-    [JsonProperty(PropertyName = "shipToTbn_Sku")]
-    public string ShipToTbnSku { get; set; }
+    [JsonProperty(PropertyName = "sku")]
+    public string Sku { get; set; }
 
     [JsonProperty(PropertyName = "quantity")]
     public int Quantity { get; set; }
@@ -83,7 +83,7 @@ public class SalesOrder
         ShipToPostalCode = NormalizeString(GetPropertyValue(data, "ShipToPostalCode", "ShipToPostalCode*"));
         ShipToCountry = NormalizeString(GetPropertyValue(data, "ShipToCountry", "ShipToCountry*"));
         ShipToPhone = NormalizeString(GetPropertyValue(data, "ShipToPhone"));
-        ShipToTbnSku = NormalizeString(GetPropertyValue(data, "ShipToTbn_Sku", "ShipToTbn Sku*"));
+        Sku = NormalizeString(GetPropertyValue(data, "Sku", "Sku*"));
         
         var qtyStr = GetPropertyValue(data, "Quantity", "Quantity*");
         Quantity = int.TryParse(qtyStr, out int qty) ? qty : 0;
@@ -94,31 +94,112 @@ public class SalesOrder
         Id = OrderNumber;
     }
     
-    private static string GetPropertyValue(dynamic data, params string[] possibleNames)
+    private string GetPropertyValue(dynamic data, params string[] possibleNames)
     {
+        if (data == null)
+            return string.Empty;
+
         foreach (var name in possibleNames)
         {
-            try
-            {
-                var property = data.GetType().GetProperty(name);
-                if (property == null) continue;
-                var val = property.GetValue(data, null);
-                if (val != null)
-                    return val.ToString();
-            }
-            catch
-            {
-                switch (data)
-                {
-                    case IDictionary<string, object> dict when dict.ContainsKey(name):
-                        return dict[name]?.ToString();
-                    // For ExpandoObject or similar
-                    case IDictionary<string, object> dictObj when dictObj.ContainsKey(name):
-                        return dictObj[name]?.ToString();
-                }
+            // Try dictionary access
+            string dictValue = TryGetFromDictionary(data, name);
+            if (!string.IsNullOrEmpty(dictValue))
+                return dictValue;
                 
+            // Try indexer access
+            string indexerValue = TryGetFromIndexer(data, name);
+            if (!string.IsNullOrEmpty(indexerValue))
+                return indexerValue;
+                
+            // Try property access
+            string propertyValue = TryGetFromProperty(data, name);
+            if (!string.IsNullOrEmpty(propertyValue))
+                return propertyValue;
+                
+            // Try dynamic access
+            string dynamicValue = TryGetFromDynamic(data, name);
+            if (!string.IsNullOrEmpty(dynamicValue))
+                return dynamicValue;
+        }
+        
+        return string.Empty;
+    }
+
+    private static string TryGetFromDictionary(dynamic data, string name)
+    {
+        try
+        {
+            if (data is IDictionary<string, object> dict)
+            {
+                if (dict.ContainsKey(name))
+                    return dict[name]?.ToString() ?? string.Empty;
+                
+                foreach (var key in dict.Keys)
+                {
+                    if (string.Equals(key, name, StringComparison.OrdinalIgnoreCase))
+                        return dict[key]?.ToString() ?? string.Empty;
+                }
             }
         }
+        catch
+        {
+            // Silently continue to the next method
+        }
+        
+        return string.Empty;
+    }
+
+    private string TryGetFromIndexer(dynamic data, string name)
+    {
+        try
+        {
+            var type = data.GetType();
+            var indexerProperty = type.GetProperty("Item");
+            if (indexerProperty != null)
+            {
+                var value = indexerProperty.GetValue(data, new object[] { name });
+                return value?.ToString() ?? string.Empty;
+            }
+        }
+        catch
+        {
+            // Silently continue to the next method
+        }
+        
+        return string.Empty;
+    }
+
+    private string TryGetFromProperty(dynamic data, string name)
+    {
+        try
+        {
+            var property = data.GetType().GetProperty(name);
+            if (property != null)
+            {
+                var value = property.GetValue(data, null);
+                return value?.ToString() ?? string.Empty;
+            }
+        }
+        catch
+        {
+            // Silently continue to the next method
+        }
+        
+        return string.Empty;
+    }
+
+    private static string TryGetFromDynamic(dynamic data, string name)
+    {
+        try
+        {
+            var result = data[name];
+            return result?.ToString() ?? string.Empty;
+        }
+        catch
+        {
+            // Silently continue
+        }
+        
         return string.Empty;
     }
     private static string NormalizeString(string value)
@@ -126,28 +207,11 @@ public class SalesOrder
         return string.IsNullOrWhiteSpace(value) ? string.Empty : value.Trim();
     }
     
-    private static DateTime ParseDate(string dateStr)
-    {
-        if (string.IsNullOrWhiteSpace(dateStr))
-            return DateTime.Now;
-        
-        if (DateTime.TryParse(dateStr, out DateTime result))
-            return result;
-        string[] formats = {
-            "M/d/yyyy", "MM/dd/yyyy", "yyyy-MM-dd", 
-            "dd-MM-yyyy", "dd/MM/yyyy", "yyyy/MM/dd"
-        };
-            
-        return DateTime.TryParseExact(dateStr, formats, 
-            System.Globalization.CultureInfo.InvariantCulture, 
-            System.Globalization.DateTimeStyles.None, out var customResult) ? customResult : DateTime.Now;
-    }
-    
     public List<string> Validate()
     {
         var errors = new List<string>();
             
-        if (string.IsNullOrWhiteSpace(Id))
+        if (string.IsNullOrWhiteSpace(OrderNumber))
             errors.Add("Order ID is required");
                 
         if (string.IsNullOrWhiteSpace(ShipToName))
@@ -168,7 +232,7 @@ public class SalesOrder
         if (string.IsNullOrWhiteSpace(ShipToCountry))
             errors.Add("Country is required");
         
-        if (string.IsNullOrWhiteSpace(ShipToTbnSku))
+        if (string.IsNullOrWhiteSpace(Sku))
             errors.Add("Sku is required");
                 
         if (Quantity <= 0)
