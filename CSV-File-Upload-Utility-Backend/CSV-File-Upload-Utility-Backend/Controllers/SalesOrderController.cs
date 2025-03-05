@@ -17,7 +17,7 @@ public class SalesOrderController(
     {
         try
         {
-            if (file.Length == 0)
+            if ( file is null || file.Length == 0)
             {
                 return BadRequest(new ApiResponse<object>
                 {

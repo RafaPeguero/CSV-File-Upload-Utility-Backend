@@ -2,7 +2,7 @@
 
     <PropertyGroup>
         <TargetFramework>net8.0</TargetFramework>
-        <RootNamespace>Csv_File_Upload_Utility_Test</RootNamespace>
+        <RootNamespace>Csv_file_upload_utility_test</RootNamespace>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
 
@@ -13,13 +13,17 @@
     <ItemGroup>
         <PackageReference Include="coverlet.collector" Version="6.0.0"/>
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0"/>
-        <PackageReference Include="NUnit" Version="3.14.0"/>
-        <PackageReference Include="NUnit.Analyzers" Version="3.9.0"/>
-        <PackageReference Include="NUnit3TestAdapter" Version="4.5.0"/>
+        <PackageReference Include="Moq" Version="4.20.72" />
+        <PackageReference Include="MSTest.TestAdapter" Version="3.1.1"/>
+        <PackageReference Include="MSTest.TestFramework" Version="3.1.1"/>
     </ItemGroup>
 
     <ItemGroup>
-        <Using Include="NUnit.Framework"/>
+        <Using Include="Microsoft.VisualStudio.TestTools.UnitTesting"/>
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\CSV-File-Upload-Utility-Backend\CSV-File-Upload-Utility-Backend.csproj" />
     </ItemGroup>
 
 </Project>

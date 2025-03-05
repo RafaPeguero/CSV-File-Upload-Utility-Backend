@@ -45,6 +45,9 @@ public class SalesOrder
 
     [JsonProperty(PropertyName = "shipToPhone")]
     public string ShipToPhone { get; set; }
+    
+    [JsonProperty(PropertyName = "shipToEmail")]
+    public string ShipToEmail { get; set; }
 
     [JsonProperty(PropertyName = "sku")]
     public string Sku { get; set; }
@@ -83,6 +86,7 @@ public class SalesOrder
         ShipToPostalCode = NormalizeString(GetPropertyValue(data, "ShipToPostalCode", "ShipToPostalCode*"));
         ShipToCountry = NormalizeString(GetPropertyValue(data, "ShipToCountry", "ShipToCountry*"));
         ShipToPhone = NormalizeString(GetPropertyValue(data, "ShipToPhone"));
+        ShipToEmail = NormalizeString(GetPropertyValue(data, "ShipToEmail"));
         Sku = NormalizeString(GetPropertyValue(data, "Sku", "Sku*"));
         
         var qtyStr = GetPropertyValue(data, "Quantity", "Quantity*");
